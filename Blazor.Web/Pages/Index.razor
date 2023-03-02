@@ -1,0 +1,89 @@
+﻿@page "/"
+@inject ISampleService _sampleService
+
+<PageTitle>Index</PageTitle>
+@*
+<p> Data coming from Stored Procedure</p>
+@if (spdata != null)
+{
+    @foreach (var item in spdata)
+    {
+        <p>ID: @item.Id</p>
+        <p>Name: @item.FullName</p>
+    }
+}
+
+<p>
+    Data coming from tables
+</p>
+@if (tabledata != null)
+{
+    @foreach (var item in tabledata)
+    {
+        <p>ID: @item.Id</p>
+        <p>Name: @item.FullName</p>
+    }
+}*@
+
+<span class="error">@ErrorDetails</span>
+<SfGrid DataSource="@tabledata" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel" })" TValue="SampleTable">
+    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="EditMode.Normal"></GridEditSettings>
+    <GridEvents OnActionBegin="ActionBeginHandler" OnActionComplete="ActionCompleteHandler" TValue="SampleTable"></GridEvents>
+    <GridPageSettings PageSize="10"></GridPageSettings>
+    <GridColumns>
+        <GridColumn Field=@nameof(sampleTable.Id) HeaderText="ID" TextAlign="TextAlign.Center" IsPrimaryKey="true" IsIdentity="true" AllowAdding="false" AllowEditing="false"></GridColumn>
+        <GridColumn Field=@nameof(sampleTable.FullName) HeaderText="Name" TextAlign="TextAlign.Center" ValidationRules="@(new ValidationRules{ Required=true})"></GridColumn>
+        <GridColumn Field=@nameof(sampleTable.CreatedOn) HeaderText="Created Date" TextAlign="TextAlign.Center" AllowAdding="false" AllowEditing="false" Format="d" Type="ColumnType.Date"></GridColumn>
+        <GridColumn Field=@nameof(sampleTable.ModifiedOn) HeaderText="Modified Date" TextAlign="TextAlign.Center" AllowAdding="false" AllowEditing="false" Format="d" Type="ColumnType.Date"></GridColumn>
+    </GridColumns>
+</SfGrid>
+
+@code {
+    public string ErrorDetails = "";
+    SampleTable sampleTable;
+    IEnumerable<CustomSPModel_Get_Result> spdata;
+    IEnumerable<SampleTable> tabledata;
+    IEnumerable<SampleTable> paginatedtabledata;
+
+    protected override async Task OnInitializedAsync()
+    {
+        spdata = await _sampleService.GetSPData();
+        tabledata = await _sampleService.GetTableData();
+        paginatedtabledata = await _sampleService.GetPaginatedTableData(1, 5);
+        var CustomModelData = await _sampleService.GetDataUsingCustomModel();
+    }
+
+    public void ActionFailure(FailureEventArgs args)
+    {
+        this.ErrorDetails = "Server exception: 404 Not found";
+        StateHasChanged();
+    }
+
+    public async void ActionBeginHandler(ActionEventArgs<SampleTable> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            if (Args.Action == "Add")
+            {
+                await _sampleService.AddTableData(Args.Data);
+            }
+            else
+            {
+                await _sampleService.UpdateTableData(Args.Data);
+            }
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            await _sampleService.DeleteTableData(Args.Data);
+        }
+    }
+    public async void ActionCompleteHandler(ActionEventArgs<SampleTable> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            await Task.Delay(50000);
+            tabledata = await _sampleService.GetTableData();
+        }
+    }
+}

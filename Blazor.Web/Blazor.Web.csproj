@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BoldReports.Net.Core" Version="4.2.55" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Syncfusion.Blazor.Grid" Version="20.3.0.47" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.3.0.47" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazor.Infrastructure\Blazor.Infrastructure.csproj" />
+    <ProjectReference Include="..\Blazor.Repository\Blazor.Repository.csproj" />
+    <ProjectReference Include="..\Blazor.Shared\Blazor.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Cache\report-designer_14cc77a2-3d28-4006-80a9-1f9a3e3256c7\" />
+    <Folder Include="wwwroot\Cache\report-designer_5eb2856d-c433-40b4-8353-4c8a7713806c\" />
+    <Folder Include="wwwroot\Cache\report-designer_d428b67b-8607-4f99-9537-80e973270959\" />
+  </ItemGroup>
+
+</Project>
