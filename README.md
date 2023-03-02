@@ -1,0 +1,2 @@
+# BlazorServer_CleanArchitecture
+BlazorServer_CleanArchitecture
